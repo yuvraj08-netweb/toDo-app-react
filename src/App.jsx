@@ -24,7 +24,11 @@ class App extends Component {
         (prevState) => {
           const updatedTasks = [
             ...prevState.tasks,
-            { _id: uid(), title: this.state.newTask, completed: false },
+            {
+              _id: uid(),
+              title: this.state.newTask,
+              completed: false,
+            },
           ];
           localStorage.setItem("tasks", JSON.stringify(updatedTasks));
           return {
@@ -35,6 +39,28 @@ class App extends Component {
         () => toast.success("Task Added !")
       );
     }
+  };
+
+  handleEnter = (event) => {
+    if (event.key === "Enter") {
+      // event.preventDefault();
+      this.handleAddTask(event);
+    }
+  };
+
+  // Method to handle updating a task
+  handleUpdateTask = (id, updatedTitle) => {
+    const updatedTasks = this.state.tasks.map((task) => {
+      if (task._id === id) {
+        return { ...task, title: updatedTitle };
+      }
+      return task;
+    });
+
+    this.setState({ tasks: updatedTasks }, () => {
+      localStorage.setItem("tasks", JSON.stringify(updatedTasks));
+      toast.success("Task Updated!");
+    });
   };
 
   onRemove = (del_id) => {
@@ -48,12 +74,13 @@ class App extends Component {
     return (
       <>
         <div className="appContainer text-white flex flex-col justify-center items-center bg-slate-600 w-full min-h-screen">
-          <h1 className="text-4xl font-bold">ToDo List App</h1>
-          <div className="inputTaskContainer mt-10 flex">
+          <h1 className={`text-4xl font-bold sticky ${ this.state.tasks.length>7 ? "pt-16" : ""}`}>ToDo List App</h1>
+          <div className="inputTaskContainer mt-10 flex gap-3">
             <InputField
+              type="text"
               fun={this.handleInputChange}
               value={this.state.newTask}
-              addTask = {this.handleAddTask}
+              addTask={this.handleEnter}
             />
             <Button
               buttonText="Add Task"
@@ -61,9 +88,9 @@ class App extends Component {
               fun={this.handleAddTask}
             />
           </div>
-          <div className="taskListContainer mt-20 w-[80%]">
+          <div className="taskListContainer mt-20 w-[90%]">
             {this.state.tasks.length < 1 ? (
-              <p>No tasks remaining!</p>
+              <p className="text-center">No tasks remaining!</p>
             ) : (
               this.state.tasks.map((task) => (
                 <TodoItem
@@ -72,6 +99,7 @@ class App extends Component {
                   onRemove={() => {
                     this.onRemove(task._id);
                   }}
+                  onUpdate={this.handleUpdateTask}
                 />
               ))
             )}

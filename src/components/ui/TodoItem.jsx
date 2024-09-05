@@ -57,7 +57,7 @@ const TodoItem = ({ task, onRemove,onUpdate }) => {
   return (
     <li className="list-none">
       <div className="liContent flex items-center justify-between mb-5 border-b pb-2">
-        <div className="toDoLeft flex">
+        <div className="toDoLeft flex break-all max-w-[55%]">
           {!isEdit && (
             <input
               type="checkbox"
@@ -68,7 +68,7 @@ const TodoItem = ({ task, onRemove,onUpdate }) => {
             />
           )}
           <p
-            className={`w-[70%] text-justify ml-3 ${
+            className={`ml-3 ${
               isChecked ? "line-through" : ""
             }`}
           >

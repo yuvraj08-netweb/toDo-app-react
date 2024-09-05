@@ -77,7 +77,6 @@ class App extends Component {
           <h1 className={`text-4xl font-bold sticky ${ this.state.tasks.length>7 ? "pt-16" : ""}`}>ToDo List App</h1>
           <div className="inputTaskContainer mt-10 flex gap-3">
             <InputField
-              type="text"
               fun={this.handleInputChange}
               value={this.state.newTask}
               addTask={this.handleEnter}

@@ -39,6 +39,9 @@ class App extends Component {
         () => toast.success("Task Added !")
       );
     }
+    else{
+      toast.error("Please Provide Some Input!")
+    }
   };
 
   handleEnter = (event) => {
@@ -60,6 +63,16 @@ class App extends Component {
     this.setState({ tasks: updatedTasks }, () => {
       localStorage.setItem("tasks", JSON.stringify(updatedTasks));
       toast.success("Task Updated!");
+    });
+  };
+
+  handleToggleComplete = (id, completed) => {
+    const updatedTasks = this.state.tasks.map((task) =>
+      task._id === id ? { ...task, completed } : task
+    );
+
+    this.setState({ tasks: updatedTasks }, () => {
+      localStorage.setItem("tasks", JSON.stringify(updatedTasks));
     });
   };
 
@@ -95,10 +108,9 @@ class App extends Component {
                 <TodoItem
                   key={task._id}
                   task={task}
-                  onRemove={() => {
-                    this.onRemove(task._id);
-                  }}
+                  onRemove={() => this.onRemove(task._id)}
                   onUpdate={this.handleUpdateTask}
+                  onToggleComplete={this.handleToggleComplete}
                 />
               ))
             )}

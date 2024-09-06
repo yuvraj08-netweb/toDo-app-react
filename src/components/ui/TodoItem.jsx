@@ -6,30 +6,18 @@ import Bin from "../../assets/Bin.svg";
 import Edit from "../../assets/Edit.svg";
 import Cross from "../../assets/Cross.svg";
 import Save from "../../assets/Save.svg";
-const TodoItem = ({ task, onRemove,onUpdate }) => {
+
+
+const TodoItem = ({ task, onRemove,onUpdate,onToggleComplete }) => {
   const [isChecked, setIsChecked] = useState(task.completed);
   const [isEdit, setIsEdit] = useState(task.isEdit);
   const [currentTitle, setCurrentTitle] = useState(task.title);
-  let tasksArray = JSON.parse(localStorage.getItem("tasks")) || [];
+  
 
-  function onToggleComplete(event) {
+  function handleToggleComplete(event) {
     const checked = event.target.checked;
     setIsChecked(checked);
-
-    const updatedTasks = tasksArray.map((tsk) => {
-      if (tsk._id === task._id) {
-        return { ...tsk, completed: checked };
-      } else {
-        return tsk;
-      }
-    });
-
-    localStorage.setItem("tasks", JSON.stringify(updatedTasks));
- 
-    // setTimeout(()=>{
-    //   onRemove();
-    // },1000)
-   
+    onToggleComplete(task._id, checked);
   }
 
   function onEdit() {
@@ -64,7 +52,7 @@ const TodoItem = ({ task, onRemove,onUpdate }) => {
               checked={isChecked}
               name="check"
               id="_check"
-              onChange={onToggleComplete}
+              onChange={handleToggleComplete}
             />
           )}
           <p

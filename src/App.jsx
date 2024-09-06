@@ -8,15 +8,18 @@ import Button from "./components/ui/Button";
 import { uid } from "uid";
 
 class App extends Component {
+  // state to manage the tasks list and the current being entered
   state = {
     tasks: JSON.parse(localStorage.getItem("tasks")) || [],
     newTask: "",
   };
 
+  // sets the value of newTask to the value being entered by the user
   handleInputChange = (event) => {
     this.setState({ newTask: event.target.value });
   };
 
+  // Method used to add the tasks in the local storage
   handleAddTask = (event) => {
     event.preventDefault();
     if (this.state.newTask.trim()) {
@@ -38,15 +41,14 @@ class App extends Component {
         },
         () => toast.success("Task Added !")
       );
-    }
-    else{
-      toast.error("Please Provide Some Input!")
+    } else {
+      toast.error("Please Provide Some Input!");
     }
   };
 
+  // Method handles the enter key while inputting
   handleEnter = (event) => {
     if (event.key === "Enter") {
-      // event.preventDefault();
       this.handleAddTask(event);
     }
   };
@@ -66,6 +68,7 @@ class App extends Component {
     });
   };
 
+  // Method that updates the completion status in local storage
   handleToggleComplete = (id, completed) => {
     const updatedTasks = this.state.tasks.map((task) =>
       task._id === id ? { ...task, completed } : task
@@ -76,6 +79,7 @@ class App extends Component {
     });
   };
 
+  // Method used to remove the data from the local storage
   onRemove = (del_id) => {
     console.log(del_id);
     const updatedTasks = this.state.tasks.filter((task) => task._id !== del_id);
@@ -87,7 +91,15 @@ class App extends Component {
     return (
       <>
         <div className="appContainer text-white flex flex-col justify-center items-center bg-slate-600 w-full min-h-screen">
-          <h1 className={`text-4xl font-bold sticky ${ this.state.tasks.length>7 ? "pt-16" : ""}`}>ToDo List App</h1>
+          {/* App Heading */}
+          <h1
+            className={`text-4xl font-bold sticky ${
+              this.state.tasks.length > 7 ? "pt-16" : ""
+            }`}
+          >
+            ToDo List App
+          </h1>
+          {/* Tasks Input Container */}
           <div className="inputTaskContainer mt-10 flex gap-3">
             <InputField
               fun={this.handleInputChange}
@@ -100,6 +112,7 @@ class App extends Component {
               fun={this.handleAddTask}
             />
           </div>
+          {/* Tasks Display Container */}
           <div className="taskListContainer mt-20 w-[90%]">
             {this.state.tasks.length < 1 ? (
               <p className="text-center">No tasks remaining!</p>
@@ -116,6 +129,7 @@ class App extends Component {
             )}
           </div>
         </div>
+        {/* Toast Container to show the messages on actions being performed */}
         <ToastContainer autoClose={1500} position="bottom-right" />
       </>
     );
@@ -123,6 +137,3 @@ class App extends Component {
 }
 
 export default App;
-
-// { this.state.tasks.map((task) => (<TodoItem />))
-// { this.state.tasks.map((task) => { return <TodoItem />})
